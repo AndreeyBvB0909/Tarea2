@@ -1,0 +1,42 @@
+//body{
+   // background-image: url("../../imgs/fondo.png");
+  //  background-size: cover;
+  //  justify-content: center;
+    //position:relative;
+//}
+//body > 
+
+.root{
+    background-image: url("../../imgs/fondo.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+    height: 100vh;
+
+}
+
+.grid {
+    height: 100%;
+}
+  .image {
+    margin-top: -100px;
+    padding-bottom: 20px;
+  }
+  .column {
+    max-width: 450px;
+  }
+  .form{
+    border: 5px;
+    border-style: solid;
+    border-radius: 10px;
+    box-shadow: 15px 15px 13px 15px #000000;
+    border-color: red;
+  }
+  .segment{
+    height: 250px;
+    width: 400px;
+  }
+  .field{
+      padding-top: 20px;
+  }
