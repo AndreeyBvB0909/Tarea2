@@ -1,13 +1,15 @@
 import React from "react";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import image from "../imgs/logo.png";
 import { Grid, Container, Paper, Avatar, Typography, TextField, Button, CssBaseline } from '@material-ui/core'
 import "../scss/components/Comentarios.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import swal from 'sweetalert2';
 
 export default function Comentarios(){
+
+  const navigate = useNavigate();
 
   const location = useLocation();
   const datos = location.state;
@@ -40,15 +42,29 @@ export default function Comentarios(){
   },[]);
 
 
+  function cerrarSesion(){
+    swal.fire({
+      title: '¿Estas seguro de cerrar sesion?',
+      text: "Te redireccionara a la pagina de inisiar sesion",
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Cerrar Sesion'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/login");
+      }
+    })
+  }
+
+
   const datas = [
     {
 
     }
   ]
-
-  function cargarDatos(){
-    
-  }
 
     const [comentarios, setComentarios] = useState(datas);
 
@@ -58,28 +74,32 @@ export default function Comentarios(){
 
     function postear(){
 
+      if(comentario != ''){
         const newContactU = {
-            usuario: datos.myData.name,
-            comentario: comentario,
-            fecha: `${date.toUTCString()}`,
-          };
+          usuario: datos.myData.name,
+          comentario: comentario,
+          fecha: `${date.toUTCString()}`,
+        };
 
-        const newContact = {
-            usuario: datos.myData.name,
-            comentario: comentario,
-            fecha: `${date.toUTCString()}`,
-          };
+      const newContact = {
+          nombre: datos.myData.name,
+          comentario: comentario,
+          fecha: `${date.toUTCString()}`,
+        };
 
-          axios.post('http://localhost:5000/api/v1/comentarios/postear', newContactU)
-  .then(({data}) => {
-          localStorage.setItem('auth', "yes");
-  })
-  .catch(({response}) => {
-    console.log(response.data);
-  })
-      
-          const newContacts = [...comentarios, newContact];
-          setComentarios(newContacts);
+        document.getElementById("txtArea").value = "";
+
+        axios.post('http://localhost:5000/api/v1/comentarios/postear', newContactU)
+.then(({data}) => {
+        localStorage.setItem('auth', "yes");
+})
+.catch(({response}) => {
+  console.log(response.data);
+})
+    
+        const newContacts = [...comentarios, newContact];
+        setComentarios(newContacts);
+      }
     }
 
     return (
@@ -99,15 +119,13 @@ export default function Comentarios(){
                         <h3>Bienvenido/a: {datos.myData.name}</h3>
                     </div>
                     <div>
-                        <Link to={"/login"}>
-                           <span>Cerrar Sesion</span>
-                        </Link>
+                    <p><a onClick={() => {cerrarSesion()}}>Cerrar Sesion</a></p>
                     </div>
                     </div>
                     <div>
                     <div className="field" id="fieldC">
                         <label>Agregar Comentario</label>
-                        <textarea defaultValue={""} onChange={(e) => setComentario(e.target.value)} />
+                        <textarea id="txtArea" defaultValue={""} onChange={(e) => {setComentario(e.target.value)}} />
                         <div className="ui animated fade button" tabIndex={0} onClick={() => postear()}>
                         <div className="visible content">Postear</div>
                         <div className="hidden content">
@@ -117,8 +135,8 @@ export default function Comentarios(){
                     </div>
                     </div>
                     <div className="scroller">
-                    <table className="ui fixed table" id="table_comm">
-                        <thead>
+                    <table className="ui fixed inverted white table" id="">
+                        <thead style={{backgroundColor: "red"}}>
                         <tr className="tr"><th >Nombre</th>
                             <th >Comentario</th>
                             <th >Fecha</th>

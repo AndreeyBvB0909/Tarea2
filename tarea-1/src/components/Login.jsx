@@ -5,6 +5,7 @@ import { Grid, Container, Paper, Avatar, Typography, TextField, Button, CssBasel
 import { useState } from "react";
 import "../scss/components/Login.scss";
 import axios from "axios";
+import swal from 'sweetalert';
 
 export default function Login(){
 
@@ -20,18 +21,37 @@ export default function Login(){
 
   function InisiarSesion() {
 
-    axios.get('http://localhost:5000/api/v1/login/'+nombre+'/'+contra)
+    if(nombre != '' && contra != ''){
+      axios.get('http://localhost:5000/api/v1/login/'+nombre+'/'+contra)
     .then(({data}) => {
       if(data.length == 0){
-  
+
+        swal({
+          title: "Lo sentimos",
+          text: "Usuario o contraseña incorrectos",
+          icon: "error",
+          button: "Aceptar"
+      });
+
       }else{
+        
         navigate("/comentarios", {state:{myData}, coments: {data}});
       }
     })
     .catch(({response}) => {
       console.log(response);
     })
-    //navigate("/comentarios", {state:{myData}});
+    }else{
+      setTimeout(() => {
+        swal({
+            title: "",
+            text: "Faltan campos por ingresar",
+            icon: "info",
+            button: "Aceptar"
+        });
+    })
+    }
+    
   }
     return (
       <Grid container component='main' className="root">
