@@ -60,16 +60,15 @@ export default function Login(){
           <script src="https://cdn.jsdelivr.net/npm/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script>
           <div className="ui middle aligned center aligned grid" id="gridS">
           <div className="column" id="columnS">
+              
               <div>
-                <div class="ui animated button" tabindex="0">
+              <form className="ui large form" id="formS">
+              <div class="ui animated button" tabindex="0">
                 <div class="visible content">Agregar Usuarios</div>
                 <div class="hidden content">
                   <i class="user plus icon"></i>
                 </div>
                 </div>
-              </div>
-              <div>
-              <form className="ui large form" id="formS">
               <div className="scroller">
                   <table class="ui fixed table" id="tableS">
                   <thead>
