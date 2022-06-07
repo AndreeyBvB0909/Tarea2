@@ -1,4 +1,4 @@
-.root{
+.rootC{
     background-image: url("../../imgs/fondo.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -7,14 +7,14 @@
     height: 100vh;
 
 } 
-.grid {
+#gridC {
     height: 100%;
 }
-.column {
+#columnC {
     max-width: 900px;
-    max-height: 600px;
+    max-height: 700px;
 }
-.form{
+#formC{
     border: 5px;
     border-style: solid;
     border-radius: 10px;
@@ -22,12 +22,33 @@
     border-color: red;
     padding: 5px;
   }
-  #encabezado{
+
+  .scroller {
+    height: 285px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+  }
+
+  th {
+    width: 30%;
+  }
+  
+  
+  th.From, th.Date {
+    width: 15%;
+  }
+  
+  th.Date {
+    width: 70%;
+  }
+  
+
+  #encabezadoC{
     display: block;
     text-align: left;
     float: left;
   }
-  .segment{
-    height: 550px;
+  #segmentC{
+    height: 650px;
     width: 850px;
   }

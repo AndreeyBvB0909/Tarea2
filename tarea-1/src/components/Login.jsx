@@ -1,9 +1,38 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import image from "../imgs/logo.png";
-import { Grid, Container, Paper, Avatar, Typography, TextField, Button, CssBaseline } from '@material-ui/core'
+import { Grid, Container, Paper, Avatar, Typography, TextField, Button, CssBaseline } from '@material-ui/core';
+import { useState } from "react";
 import "../scss/components/Login.scss";
+import axios from "axios";
 
 export default function Login(){
+
+  const navigate = useNavigate();
+
+  const [nombre, setNombre] = useState('');
+
+  const [contra, setContra] = useState('');
+
+  const myData = {
+    name: nombre
+  }
+
+  function InisiarSesion() {
+
+    axios.get('http://localhost:5000/api/v1/login/'+nombre+'/'+contra)
+    .then(({data}) => {
+      if(data.length == 0){
+  
+      }else{
+        navigate("/comentarios", {state:{myData}, coments: {data}});
+      }
+    })
+    .catch(({response}) => {
+      console.log(response);
+    })
+    //navigate("/comentarios", {state:{myData}});
+  }
     return (
       <Grid container component='main' className="root">
         <div>
@@ -19,17 +48,17 @@ export default function Login(){
                   <div className="field">
                     <div className="ui left icon input">
                       <i className="user icon" />
-                      <input type="text" name="email" placeholder="Usuario" />
+                      <input type="text" name="email" placeholder="Usuario" onChange={(e) => setNombre(e.target.value)}/>
                     </div>
                   </div>
                   <div className="field">
                     <div className="ui left icon input">
                       <i className="lock icon" />
-                      <input type="password" name="password" placeholder="Clave" />
+                      <input type="password" name="password" placeholder="Clave" onChange={(e) => setContra(e.target.value)}/>
                     </div>
                   </div>
                   <div className="field">
-                    <div className="ui red submit button">Iniciar Sesion</div>
+                    <div className="ui red submit button" onClick={() => InisiarSesion()}>Iniciar Sesion</div>
                   </div>
                 </div>
               </form>
