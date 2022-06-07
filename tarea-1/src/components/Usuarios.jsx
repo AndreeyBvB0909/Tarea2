@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import image from "../imgs/logo.png";
 import { Grid, Container, Paper, Avatar, Typography, TextField, Button, CssBaseline } from '@material-ui/core';
 import { useState } from "react";
-import "../scss/components/Login.scss";
+import "../scss/components/Usuarios.scss";
 import axios from "axios";
 import swal from 'sweetalert';
 
@@ -54,34 +54,58 @@ export default function Login(){
     
   }
     return (
-      <Grid container component='main' className="root">
+      <Grid container component='main' className="rootS">
         <div>
           <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css" />
           <script src="https://cdn.jsdelivr.net/npm/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script>
-          <div className="ui middle aligned center aligned grid">
-            <div className="column">
-              <div className="ui small image">
-                <img src={image} />
+          <div className="ui middle aligned center aligned grid" id="gridS">
+          <div className="column" id="columnS">
+              <div>
+                <div class="ui animated button" tabindex="0">
+                <div class="visible content">Agregar Usuarios</div>
+                <div class="hidden content">
+                  <i class="user plus icon"></i>
+                </div>
+                </div>
               </div>
-              <form className="ui large form">
-                <div className="ui stacked secondary segment">
-                  <div className="field">
-                    <div className="ui left icon input">
-                      <i className="user icon" />
-                      <input type="text" name="email" placeholder="Usuario" onChange={(e) => setNombre(e.target.value)}/>
-                    </div>
-                  </div>
-                  <div className="field">
-                    <div className="ui left icon input">
-                      <i className="lock icon" />
-                      <input type="password" name="password" placeholder="Clave" onChange={(e) => setContra(e.target.value)}/>
-                    </div>
-                  </div>
-                  <div className="field">
-                    <div className="ui red submit button" onClick={() => InisiarSesion()}>Iniciar Sesion</div>
-                  </div>
+              <div>
+              <form className="ui large form" id="formS">
+              <div className="scroller">
+                  <table class="ui fixed table" id="tableS">
+                  <thead>
+                    <tr><th>Nombre</th>
+                    <th>Contrasena</th>
+                    <th>Accion</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr>
+                      <td data-label="Nombre">James</td>
+                      <td data-label="Contrasena">24</td>
+                      <td data-label="Accion">
+                      <button class="ui button">
+                          Modificar
+                      </button>
+                      <button class="ui button">
+                          Eliminar
+                      </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      
+                    </tr>
+                    <tr>
+                    
+                    </tr>
+                  </tbody>
+                </table>
                 </div>
               </form>
+              </div>
+              <div id="volver">
+                <button class="ui button">
+                  Volver
+                </button>
+              </div>
             </div>
           </div>
         </div>

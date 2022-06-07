@@ -1,0 +1,43 @@
+.rootS{
+    background-image: url("../../imgs/fondo.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+    height: 100vh;
+} 
+#gridS{
+    height: 100%;
+}
+
+#columnS{
+    max-width: 900px;
+    max-height: 700px;
+    padding-top: 15px;
+}
+
+.scroller {
+    height: 285px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+#formC{
+    border: 5px;
+    border-style: solid;
+    border-radius: 10px;
+    box-shadow: 15px 15px 13px 15px #000000;
+    border-color: red;
+    padding: 5px;
+  }
+#tableS{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+  #volver{
+      padding-top: 40px;
+  }
