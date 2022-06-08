@@ -6,6 +6,7 @@ import "../scss/components/Comentarios.scss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import swal from 'sweetalert2';
+import Cookies from "universal-cookie";
 
 export default function Comentarios(){
 
@@ -14,6 +15,7 @@ export default function Comentarios(){
   const location = useLocation();
   const datos = location.state;
   const comenta = location.coments;
+  const cookies = new Cookies();
 
   let date = new Date();
 
@@ -116,7 +118,7 @@ export default function Comentarios(){
                         <img src={image} width="50px" height="50px" />
                     </div>
                     <div>
-                        <h3>Bienvenido/a: {datos.myData.name}</h3>
+                        <h3>Bienvenido/a: {cookies.get('nombreUsuario')}</h3>
                     </div>
                     <div>
                     <p><a onClick={() => {cerrarSesion()}}>Cerrar Sesion</a></p>

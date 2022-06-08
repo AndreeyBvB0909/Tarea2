@@ -6,6 +6,7 @@ import { useState } from "react";
 import "../scss/components/Login.scss";
 import axios from "axios";
 import swal from 'sweetalert';
+import Cookies from "universal-cookie";
 
 export default function Login(){
 
@@ -35,6 +36,11 @@ export default function Login(){
 
       }else{
         
+        const cookies = new Cookies();
+
+        cookies.set('nombreUsuario', nombre, {path: '/'});
+        cookies.set('contrasena', contra, {path: '/'});
+
         navigate("/comentarios", {state:{myData}, coments: {data}});
       }
     })
