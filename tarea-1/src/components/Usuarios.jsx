@@ -1,13 +1,13 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import image from "../imgs/logo.png";
 import { Grid, Container, Paper, Avatar, Typography, TextField, Button, CssBaseline } from '@material-ui/core';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../scss/components/Usuarios.scss";
 import axios from "axios";
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
-export default function Login(){
+export default function Login(props){
 
   const navigate = useNavigate();
 
@@ -15,44 +15,155 @@ export default function Login(){
 
   const [contra, setContra] = useState('');
 
-  const myData = {
-    name: nombre
+  const datos = [
+    {
+      
+    }
+  ]
+
+  const [comentarios, setComentarios] = useState(datos);
+
+  useEffect(() => {
+    return () => {
+      actualizarTabla();
+    }
+  },[]);
+
+  async function actualizarUsuario(id, nombre, contrasena){
+
+    swal.fire({
+      title: 'Actualizar Usuario',
+      html: `<input type="text" id="login" class="swal2-input" placeholder="Usuario">
+      <input type="password" id="password" class="swal2-input" placeholder="Contraseña">`,
+      confirmButtonText: 'Actualizar',
+      focusConfirm: false,
+      preConfirm: () => {
+        const login = swal.getPopup().querySelector('#login').value
+        const password = swal.getPopup().querySelector('#password').value
+        if (!login || !password) {
+          swal.showValidationMessage(`Faltan datos por ingresar`)
+        }else{
+          (async () => {
+
+            const newContact = {
+              id: id,
+              nombre: login,
+              contrasena: password
+            };
+      
+            const resp = await axios.put('http://localhost:5000/api/v1/usuarios/actualizar/', newContact)
+              .then(response => this.setState({ updatedAt: response.data.updatedAt }));
+           })();
+        }
+      }
+    }).then((result) => {
+
+      swal.fire(
+        '',
+        'Usuario actualizado con exito',
+        'success'
+      ).then((result) => {
+        window.location.reload();
+      })
+    })
   }
 
-  function InisiarSesion() {
+  async function eliminarUsuario(idE){
+    swal.fire({
+      title: '¿Seguro que deseas eliminar el usuario?',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar'
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
 
-    if(nombre != '' && contra != ''){
-      axios.get('http://localhost:5000/api/v1/login/'+nombre+'/'+contra)
-    .then(({data}) => {
-      if(data.length == 0){
+        const newContact = {
+          id: idE
+        };
 
-        swal({
-          title: "Lo sentimos",
-          text: "Usuario o contraseña incorrectos",
-          icon: "error",
-          button: "Aceptar"
-      });
+        axios.delete('http://localhost:5000/api/v1/usuarios/eliminar/'+idE, newContact)
+              .then(response => console.log("usuario eliminado"));
 
-      }else{
-        
-        navigate("/comentarios", {state:{myData}, coments: {data}});
+        swal.fire('Usuario eliminado con exito', '', 'success').then((result) => {
+          window.location.reload();
+        })
       }
     })
-    .catch(({response}) => {
-      console.log(response);
-    })
-    }else{
-      setTimeout(() => {
-        swal({
-            title: "",
-            text: "Faltan campos por ingresar",
-            icon: "info",
-            button: "Aceptar"
-        });
-    })
-    }
-    
   }
+
+  async function actualizarTabla(){
+
+    (async () => {
+     const act = await axios.get('http://localhost:5000/api/v1/obtener')
+      .then(({data}) => {
+              data.forEach(element => {
+                datos.push({
+                  id: element.id,
+                  nombre: element.nombre,
+                  contrasena: element.contrasena,
+                  editar: <div><button className='button-37' onClick={() => actualizarUsuario(element.id, element.nombre, element.contrasena)}>Actualizar</button> <button className='button-37' onClick={() => eliminarUsuario(element.id)}>Eliminar</button></div>,
+                  })          
+              })
+              const newContacts = [...comentarios];
+              setComentarios(newContacts);
+      })
+      .catch(({response}) => {
+        console.log(response);
+      })
+    })();
+
+  }
+
+  async function crearUsuario(){
+
+    
+      swal.fire({
+        title: 'Nuevo Usuario',
+        html: `<input type="text" id="login" class="swal2-input" placeholder="Usuario">
+        <input type="password" id="password" class="swal2-input" placeholder="Contraseña">`,
+        confirmButtonText: 'Registrar',
+        focusConfirm: false,
+        preConfirm: () => {
+          const login = swal.getPopup().querySelector('#login').value
+          const password = swal.getPopup().querySelector('#password').value
+          if (!login || !password) {
+            swal.showValidationMessage(`Faltan datos por ingresar`)
+          }else{
+
+            (async () => {
+              
+              const newContact = {
+                nombre: login,
+                contrasena: password
+              };
+  
+              const response = await axios.post('http://localhost:5000/api/v1/usuarios/crear/', newContact)
+             .then(({data}) => {
+              localStorage.setItem('auth', "yes");
+               })
+                 .catch(({response}) => {
+                console.log(response.data);
+               })
+
+            })();  
+          }
+        }
+      }).then((result) => {
+
+        window.location.reload();
+
+        swal.fire(
+          '',
+          'Usuario registrado con exito',
+          'success'
+        )
+      })
+  
+  }
+
+  
+
+
     return (
       <Grid container component='main' className="rootS">
         <div>
@@ -62,47 +173,38 @@ export default function Login(){
           <div className="column" id="columnS">
               
               <div>
-              <form className="ui large form" id="formS">
-              <div class="ui animated button" tabindex="0">
-                <div class="visible content">Agregar Usuarios</div>
-                <div class="hidden content">
-                  <i class="user plus icon"></i>
+              <div className="ui large form" id="formS">
+              <div className="ui animated button" tabIndex="0" onClick={()=>crearUsuario()}>
+                <div className="visible content">Agregar Usuarios</div>
+                <div className="hidden content">
+                  <i className="user plus icon"></i>
                 </div>
                 </div>
               <div className="scroller">
-                  <table class="ui fixed table" id="tableS">
+                  <table className="ui fixed table" id="tableS">
                   <thead>
                     <tr><th>Nombre</th>
                     <th>Contrasena</th>
                     <th>Accion</th>
                   </tr></thead>
                   <tbody>
-                    <tr>
-                      <td data-label="Nombre">James</td>
-                      <td data-label="Contrasena">24</td>
-                      <td data-label="Accion">
-                      <button class="ui button">
-                          Modificar
-                      </button>
-                      <button class="ui button">
-                          Eliminar
-                      </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      
-                    </tr>
-                    <tr>
-                    
-                    </tr>
+                  {React.Children.toArray(
+                            comentarios.map(({ nombre, contrasena, editar }) =>(
+                            <tr>
+                            <td>{nombre}</td>
+                            <td>{contrasena}</td>
+                            <td>{editar}</td>
+                        </tr>
+                        ))
+                        )}
                   </tbody>
                 </table>
                 </div>
-              </form>
+              </div>
               </div>
               <div id="volver">
-                <button class="ui button">
-                  Volver
+                <button className="ui button" onClick={() => navigate("/comentarios")}>
+                Volver
                 </button>
               </div>
             </div>

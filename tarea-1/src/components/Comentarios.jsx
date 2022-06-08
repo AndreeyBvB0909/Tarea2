@@ -56,7 +56,28 @@ export default function Comentarios(){
       confirmButtonText: 'Cerrar Sesion'
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate("/login");
+        let timerInterval
+        swal.fire({
+          title: 'Cerrando cesion',
+          html: 'Espera un momento...',
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            swal.showLoading()
+            const b = swal.getHtmlContainer().querySelector('b')
+            timerInterval = setInterval(() => {
+              b.textContent = swal.getTimerLeft()
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === swal.DismissReason.timer) {
+            navigate("/login");
+          }
+        })
       }
     })
   }
@@ -78,13 +99,13 @@ export default function Comentarios(){
 
       if(comentario != ''){
         const newContactU = {
-          usuario: datos.myData.name,
+          usuario: cookies.get('nombreUsuario'),
           comentario: comentario,
           fecha: `${date.toUTCString()}`,
         };
 
       const newContact = {
-          nombre: datos.myData.name,
+          nombre: cookies.get('nombreUsuario'),
           comentario: comentario,
           fecha: `${date.toUTCString()}`,
         };
@@ -159,6 +180,11 @@ export default function Comentarios(){
                     </div>
                 </div>
                 </form>
+                <div id="volver">
+                <button className="ui button" onClick={() => navigate("/usuarios")}>
+                Gestionar usuarios
+                </button>
+              </div>
             </div>
             </div>
         </div>
